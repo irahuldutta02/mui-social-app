@@ -80,6 +80,8 @@ export function Input() {
         setPostLoading(false);
         setPostText("");
         setImageUrl("");
+        setTags("");
+        setPostAs(null);
       });
   }
 
