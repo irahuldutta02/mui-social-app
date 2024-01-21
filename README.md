@@ -1,8 +1,48 @@
-# React + Vite
+# MUI SOCIAL APP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Deployment
 
-Currently, two official plugins are available:
+### [Deployed at Vercel 🔗](https://mui-social-app-ten.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<!-- ## Video Preview -->
+
+
+## Description
+
+### A simple built with MUI(Popular React Component Library) and [dummyapi.io](https://dummyapi.io/)
+- You can create new post 
+- You can like a post
+- You can delete a post
+- You can add image(URL) and tags to a post
+- You can see all users
+- You can see each user with their custom routes 
+
+### FYI
+- No authentication is implemented as the api does not support it
+
+## Local Setup
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/irahuldutta02/mui-social-app
+cd mui-social-app
+```
+### 2. Install dependencies
+
+```bash
+npm install
+```
+### 3. Start the development server
+
+```bash
+npm run dev
+```
+
+## Tech Stack
+- React 
+  - React Router Dom
+  - implemented custom hooks
+  - implemented context api
+- Material UI
+- [dummyapi.io](https://dummyapi.io/)
+- axios for api calls
