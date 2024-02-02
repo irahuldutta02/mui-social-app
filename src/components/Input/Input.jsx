@@ -158,6 +158,7 @@ export function Input() {
             onChange={(e, value) => {
               setPostAs(value);
             }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
           />
 
           {postLoading ? (

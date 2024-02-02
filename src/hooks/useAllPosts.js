@@ -15,7 +15,7 @@ export default function useAllPosts() {
         setPostsData(response.data.data);
       })
       .catch((error) => console.log(error));
-  });
+  }, []);
 
   return [postsData, setPostsData];
 }
