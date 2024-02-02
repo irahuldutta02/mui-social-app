@@ -5,9 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import ErrorPage from "../../ErrorPage";
-import useSingleUserData from "../../hooks/useSingleUserData";
+import fetchUser from "../../helpers/fetchUser";
 
 const StyledCard = styled(Card)({
   maxWidth: 300,
@@ -31,16 +32,29 @@ const StyledCardContent = styled(CardContent)({
 
 export function UserCard() {
   let { id } = useParams();
+  const response = useQuery(["user", id], fetchUser);
 
-  const [user, status] = useSingleUserData(id);
-
-  if (status === "error") {
+  if (response.isError) {
     return <ErrorPage error={"No such user found"} />;
   }
-
-  return (
-    <>
-      {status === "success" && Object.keys(user).length !== 0 ? (
+  if (response.isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (response.isSuccess) {
+    const user = response.data.data;
+    return (
+      <>
         <Box
           sx={{
             display: "flex",
@@ -78,18 +92,7 @@ export function UserCard() {
             </StyledCardContent>
           </StyledCard>
         </Box>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "20px",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
-    </>
-  );
+      </>
+    );
+  }
 }

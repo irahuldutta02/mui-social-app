@@ -6,30 +6,51 @@ import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import useUsersData from "../../hooks/useUsersData";
+import fetchAllUsers from "../../helpers/fetchAllUsers";
 
 export default function UserList() {
-  const [usersData, loading] = useUsersData();
+  const response = useQuery("users", fetchAllUsers);
 
-  return (
-    <>
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <h2>All Users</h2>
-        </Box>
-        <List
-          dense
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {!loading ? (
-            usersData.map((user) => {
+  if (response.isError) {
+    return <div>Error</div>;
+  }
+  if (response.isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (response.isSuccess) {
+    const usersData = response.data.data.data;
+
+    return (
+      <>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h2>All Users</h2>
+          </Box>
+          <List
+            dense
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          >
+            {usersData.map((user) => {
               return (
                 <ListItem key={user.id} disablePadding>
                   <Link
@@ -60,20 +81,10 @@ export default function UserList() {
                   </Link>
                 </ListItem>
               );
-            })
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          )}
-        </List>
-      </Box>
-    </>
-  );
+            })}
+          </List>
+        </Box>
+      </>
+    );
+  }
 }
