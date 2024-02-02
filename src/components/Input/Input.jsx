@@ -5,8 +5,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useContext, useState } from "react";
+import { useQuery } from "react-query";
 import validator from "validator";
-import useUsersData from "../../hooks/useUsersData";
+import fetchAllUsers from "../../helpers/fetchAllUsers";
 import PostsContext from "../../provider/PostsProvider";
 
 function createUserArray(userData) {
@@ -38,7 +39,9 @@ export function Input() {
   const [postAs, setPostAs] = useState(null);
   const { postsData, setPostsData } = useContext(PostsContext);
 
-  const [usersData, loading] = useUsersData();
+  // const [usersData, loading] = useUsersData();
+
+  const response = useQuery("users", fetchAllUsers);
 
   async function createPost() {
     if (postText === "" || imageUrl === "" || postAs === null) {
@@ -85,21 +88,29 @@ export function Input() {
       });
   }
 
-  return (
-    <>
-      {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <h2>Loading...</h2>
-        </Box>
-      ) : (
+  if (response.isError) {
+    return <div>Error</div>;
+  }
+  if (response.isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h2>Loading...</h2>
+      </Box>
+    );
+  }
+
+  if (response.isSuccess) {
+    const usersData = response.data.data.data;
+    return (
+      <>
         <Box
           sx={{
             display: "flex",
@@ -164,7 +175,7 @@ export function Input() {
             </Button>
           )}
         </Box>
-      )}
-    </>
-  );
+      </>
+    );
+  }
 }
